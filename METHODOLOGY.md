@@ -1,0 +1,41 @@
+1. Problem Framing
+
+
+1.1 Overview
+
+The premise of this work is that synthetically generated video and physically captured video differ in a measurable way that is not artefact-based but structural. Generated video is produced by a deterministic procedure operating on a latent representation. Frame-to-frame coherence is achieved by interpolation in latent space, by attention mechanisms bridging frames, or by explicit temporal-consistency losses. These procedures carry detectable structural patterns between attended states, inherently distinct from the high entropy noise signal of genuine capture environments. Even when the visible output is convincing, the residuals between frames are not independent in the way real sensor noise is. The hypothesis is that this structural difference is measurable.
+
+Conceptual Definition of Deepfake
+Deepfake is a subset of synthetic media or substantially manipulated video media produced by generative models, in which a subject's face, voice, or actions are fabricated or transferred from another source. The content might be created from scratch, or pre-existing content may have been manipulated.  Deepfakes are often created with the intention to deceive, defame, or misrepresent someone or something.Sources: 
+The Alan Turing Institute, https://www.turing.ac.uk/blog/what-are-deepfakes-and-how-can-we-detect-them
+UK GOVt, https://www.gov.uk/government/publications/deepfake-detection-technology/deepfake-detection-technology
+
+Operational Definition of Deepfake
+Study-specific: Used here in the broad sense; any AI-generated or AI-altered footage, whether produced by full synthesis, partial manipulation, frame interpolation, face-swap, or other procedural or technical permutation. Not restricted to the narrow sense of face-swap GAN outputs.
+
+Definition difficulties: The category becomes harder to delimit at its edges. Mixed-media workflows, in which AI-generated elements are composited into otherwise real footage, or where real footage is selectively altered frame-by-frame, sit on a spectrum rather than in a binary. Human-in-the-loop pipelines, in which a generated output is finished by a colourist, editor, or VFX artist, further blur the boundary: the resulting footage is neither purely synthetic nor purely captured. For the purposes of this study, any footage whose temporal structure has been substantively produced or modified by a generative process is treated as within scope, on the understanding that the boundary is gradient, not categorical.
+
+
+1.2 Project Development and Lineage
+
+This hypothesis developed from an earlier project developing realistic synthetic motion in procedural animation rather than detecting it.
+Having worked professionally as a filmmaker and editor, I began earlier module work investigating machine learning techniques for 3D character facial animation, specifically the problem of unnatural expression transfer in facial rigging interpolation. That work directly observed that conventional interpolation between expression states generates unnatural linear conversions. PCA was used as a dimensionality-reduction tool over facial landmark coordinates, to identify low-dimensional structure in motion patterns.
+A subsequent module piece applied a similar framework to deepfake detection directly, using KNN over PCA-reduced facial landmark and temporal features. The present project is the synthesis and development of those two threads: taking the detection question from the second, the motion-and-PCA framework from the first, and grounding both in the underlying theory that deterministic synthesis necessarily leaves a statistical signature in the residual structure of the generated signal.
+Addressing deepfake detection from this angle reframes the question. The relevant question is not "what artefact does this generator produce”, rather the question is "what statistical signature does any deterministic construction process necessarily leave behind." If that signature exists and can be characterised, it is in principle generator-agnostic.
+
+
+1.3 Motion Fields v Artifacts
+
+Traditional methods for deepfake detection focus on individual frames and learn spatial inconsistencies such as parallax, eye reflections, skin texture, and more frequency-domain artefacts. These methods report strong numbers on clean benchmarks but degrade sharply on in-the-wild content and on novel generation methods.
+Motion is a complementary and arguably stronger signal for the determinism-signature hypothesis specifically. The physical grammar of how a real camera records a dynamic environment; such as lens characteristics, rolling shutter, micro-jitter, focus breathing, perspective, essentially the independent noise signature of every frame is hard for a generative model to reproduce without leaving formulaic traces. Procedural and synthetic frame transformation tends to produce motion fields that are smoother than physically captured ones, with cross-frame dependencies that real sensor noise does not have.
+
+Optical flow is the per-pixel motion field between two consecutive video frames, representing how each region of the image has shifted in space and time. Computed by estimating, for every pixel in frame n, where the same content has moved to in frame n+1. Optical flow residuals are difference between predicted next frame and actual next frame, after motion compensation. Once isolated, they are the part of the inter-frame variation that is not explainable by physical motion, and therefore the place the determinism signature should be most visible.
+
+ 
+1.4 Limits of Detection and the Provenance Argument.
+
+The evolving landscape yields entirely new attack vectors in all domains. It’s in these cases, that the adversary is sophisticated, well-resourced, and highly motivated to defeat detection. The pipeline-versus-finished-output distinction becomes acute where a state actor or organised group producing deepfakes has the time and skill to layer analogue artefacts, regrade, blend with real footage, simulate plausible compression histories, even film the synthetic output off a screen with a real camera or using virtual production. Despite regulatory attempts and asset-manifest specifications, metadata fields can be easily manipulated or removed entirely by bad actors using file or metadata editing tools, and watermark embedding or cryptographic binding can be bypassed using autoencoders.
+
+From my personal experience in professionally creating media, I know that the rapidly evolving processes to create deepfakes will likely undermine tangible detection in the wild in many cases. Detection is one intervention in a much bigger and complex problem. The deeper issue is structural, concerning how decision structures are engineered and how trust is established and maintained within them. The real answer to cracking the deepfake riddle is redesigning these architectures so that authenticity can be established at the source rather than reconstructed after the fact. Perhaps the real question is how we can orchestrate an epistemic anatomisation of information ecosystems and redesign monolithic societal structures entirely. Engineering trust provenance is the new frontier. Perhaps it’s the most lucrative future industry. 
+
+“The technology intervenes especially because of developments in communications , and in general the handling of information. wherever you look within industry, within government, absolutely all human affairs are so richly interconected- the rise in the degree of interaction is on the exponential curve- that all sorts of knitting happens across vertical structures. the vertical monoliths on the blackboard cannot handle this sort of thing. insofar that they are aware of the new problems, the vertical monolith,s try to respond by the establishment of properly regulated inter monolith committees. we must note that these will not meet the need very well, if the need is indeed for the demolition and rebuilding of monoliths themselves” Stafford Beer, 1975, Platform for Change, p284
