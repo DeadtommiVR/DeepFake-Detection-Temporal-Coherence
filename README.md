@@ -1,18 +1,20 @@
 # Deepfake Detection via Optical Flow Residuals and CNN-LSTM
 
-**Status:** Exploratory one-week module project, paused at planning/early-implementation stage. Documented here as a research log rather than a finished system.
+**Status:** Exploratory two day module project, paused at planning/early-implementation stage. Documented here as a research log rather than a finished system.
 
 ## Overview
 
-This project investigates **deepfake video detection through the structure of temporal coherence** rather than per-frame spatial artefacts. A statistical test for residual independance/entropy. The premise is that synthetically generated and physically captured video differ in a way that is not artefact-based but *structural*. Generated video is produced by a deterministic procedure operating on a latent representation, and its frame-to-frame coherence, achieved by interpolation in latent space, by attention bridging frames, or by explicit temporal-consistency losses, leaving structured, non-independent patterns in the residuals between frames. Genuine capture carries the high-entropy noise of a real sensor instead. So even when the visible output is convincing, the inter-frame residuals are not independent in the way real sensor noise is, and the hypothesis is that this structural difference is measurable.
+This project investigates **deepfake video detection through the structure of temporal coherence** rather than per-frame spatial artefacts. The premise is that synthetically generated and physically captured video differ in a way that is not artefact-based but *structural*. Generated video is produced by a deterministic procedure operating on a latent representation, and its frame-to-frame coherence, achieved by interpolation in latent space, by attention bridging frames, or by explicit temporal-consistency losses, leaving structured, non-independent patterns in the residuals between frames. Genuine capture carries the high-entropy noise of a real sensor instead. So even when the visible output is convincing, the inter-frame residuals are not independent in the way real sensor noise is, and the hypothesis is that this structural difference is measurable.
 
-The approach combines:
+The initial approach combines:
 
 - **Farneback dense optical flow** computed dynamically between consecutive frames
 - A **CNN-LSTM hybrid model** (EfficientNet-B0 backbone feeding into an LSTM) to capture spatial features and temporal irregularities respectively
 - **Bayesian Optimization** for hyperparameter tuning, given limited compute
 
 The project pivoted away from an initial PCA / statistical feature engineering plan once dataset handling proved more timeconsuming than expected.
+
+The principled next step woudl be an explicit statistical test of residual independence, rather than a black-box classifier.
 
 ## Documentation
 
@@ -28,7 +30,7 @@ Optical flow estimates that inter-frame relationship directly, making the struct
 
 A central limitation of optical-flow-based detection — and one that became clear during this project — is **lossy video compression**.
 
-Academic deepfake datasets typically provide high-bitrate source video. Real-world deepfakes circulate through YouTube, TikTok, WhatsApp, and other platforms that apply aggressive H.264/H.265 re-encoding. This compression specifically targets and smooths high-frequency temporal residuals — which is exactly where optical-flow-based detection finds its signal. The codec's own motion estimation effectively launders the artefacts the detector is trying to see. 
+Academic deepfake datasets typically provide high-bitrate source video. Real-world deepfakes circulate through YouTube, TikTok, WhatsApp, and other platforms that apply aggressive H.264/H.265 re-encoding. This compression specifically targets and smooths high-frequency temporal residuals, where optical-flow-based detection finds its signal. The codec's own motion estimation effectively launders the artefacts the detector is trying to see. 
 
 Practically, this means:
 
