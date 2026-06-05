@@ -40,6 +40,35 @@ From my personal experience in professionally creating media, I know that the ra
 
 “The technology intervenes especially because of developments in communications , and in general the handling of information. wherever you look within industry, within government, absolutely all human affairs are so richly interconected- the rise in the degree of interaction is on the exponential curve- that all sorts of knitting happens across vertical structures. the vertical monoliths on the blackboard cannot handle this sort of thing. insofar that they are aware of the new problems, the vertical monolith,s try to respond by the establishment of properly regulated inter monolith committees. we must note that these will not meet the need very well, if the need is indeed for the demolition and rebuilding of monoliths themselves” Stafford Beer, 1975, Platform for Change, p284
 
+1.5 Stakes and Provenance
+
+The first deepfakes were created using Generative Adversarial Networks (GANs) and Variational Autoencoders (VAEs). However, the use of these technologies have evolved and the availability of new tools powered by Generative AI (GenAI), which allow users to create wholly new content that is significantly more convincing. These tools have also made it easier to create deepfakes, such that anybody with modest technical skills can do so.
+Detection research is often benchmarked against entertainment-tier media; face swaps in viral clips, celebrity impersonation, essentially low-effort manipulation made with cheap accessible software. These cases are somewhat simple, and they are largely solved with decent models that can identify them well. However higher-stake synthetic media is often harder to detect. In the research paper titled Deepfakes and Cheapfakes, The Manipulation of audiovisual evidence, Britt Paris explains how ‘both can be used to influence the politics of evidence: how evidence changes and is changed by its existence in cultural, social, and political structures”. https://datasociety.net/wp-content/uploads/2019/09/DS_Deepfakes_Cheap_FakesFinal-1-1.pdf
+
+High-stakes synthetic media spans several distinct domains:
+Political — fabricated speeches, manufactured statements, or synthetic footage of public figures, particularly around elections or geopolitical flashpoints
+Legal and evidentiary — synthetic content presented as evidence in court, or genuine evidence undermined by plausible-deniability claims of synthesis
+Intimate-image abuse — non-consensual sexual content generated to harass, extort, or harm individuals, disproportionately affecting women and minors
+Cybersecurity — voice and video synthesis used to amplify existing attack vectors (impersonation, social engineering, fraud) and to enable new ones
+Human rights documentation — synthetic footage used to fabricate atrocities, or used to discredit genuine documentation of them. As Sam Gregory observed in MIT Technology Review: "this fear that real evidence can plausibly be dismissed as fake gives another weapon to the powerful — to say 'it's a deepfake' about anything that people who are out of power are trying to use to show corruption, to show human rights abuses."
+
+Example Cases 
+https://gnet-research.org/2023/08/29/deepfake-doomsday-the-role-of-artificial-intelligence-in-amplifying-apocalyptic-islamist-propaganda/
+https://blogs.microsoft.com/on-the-issues/2023/09/07/digital-threats-cyberattacks-east-asia-china-north-korea/https://www.bloomberg.com/news/articles/2023-09-29/trolls-in-slovakian-election-tap-ai-deepfakes-to-spread-disinfo?embedded-checkout=truehttps://www.wired.com/story/yahoo-boys-real-time-deepfake-scams/#:%7E:text=The%20digital%20con%20artists%20started,to%20them%2C%E2%80%9D%20he%20says.
+https://www.bbc.co.uk/news/uk-66130785
+https://journals.sagepub.com/doi/full/10.1177/0964663920947791
+https://www.ofcom.org.uk/about-ofcom/our-research/opendata
+https://capx.co/the-deepfake-general-election/
+https://www.abc.net.au/news/2024-06-29/uk-election-pro-russian-facebook-pages-coordinating/104038246https://www.womeninjournalism.org/threats-all/uk-women-press-freedom-condemns-deepfake-attacks-on-cathy-newman-as-part-of-a-growing-trend-against-journalistshttps://www.nationalcrimeagency.gov.uk/news/nca-issues-urgent-warning-about-sextortion
+https://www.fenimoreharper.com/research/deepfake-political-advertisinghttps://www.404media.co/irl-fakes-where-people-pay-for-ai-generated-porn-of-normal-people/
+
+Surveys and Analysis
+https://arxiv.org/pdf/2407.05529v1https://www.ofcom.org.uk/about-ofcom/our-research/opendatahttps://www.channel4.com/news/exclusive-hundreds-of-british-celebrities-victims-of-deepfake-porn
+https://www.theverge.com/2020/10/20/21519322/deepfake-fake-nudes-telegram-bot-deepnude-sensity-reporthttps://www.homesecurityheroes.com/state-of-deepfakes/#appendix
+
+Deepfake Applications
+https://myimagemychoice.org/take-action/https://markets.businessinsider.com/news/stocks/apple-removed-ai-apps-from-its-appstore-which-promoted-creating-non-consensual-nude-images-1033295650https://markets.businessinsider.com/news/stocks/apple-removed-ai-apps-from-its-appstore-which-promoted-creating-non-consensual-nude-images-1033295650
+
 
 2. Related Work
 

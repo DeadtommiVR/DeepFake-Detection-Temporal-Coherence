@@ -20,7 +20,7 @@ This README is the project overview. The full write-up lives in **[METHODOLOGY.m
 
 ## Why Optical Flow
 
-Most published deepfake detectors operate on individual frames and learn spatial inconsistencies — eye reflections, skin texture, frequency-domain artefacts. These methods report strong numbers on clean benchmarks but degrade sharply on in-the-wild content. The structural signal is complementary, and harder to erase, because it lives not in any single frame but in the relationship *between* frames: a generative procedure's deterministic, non-independent inter-frame structure should differ from the high-entropy noise of genuine capture even when every individual frame is convincing.
+Most published deepfake detectors operate on individual frames and learn spatial inconsistencies such as eye reflections, skin texture, frequency-domain artefacts. These methods report strong numbers on clean benchmarks but degrade sharply on in-the-wild content. The structural signal is complementary, and harder to erase, because it lives not in any single frame but in the relationship *between* frames: a generative procedure's deterministic, non-independent inter-frame structure should differ from the high-entropy noise of genuine capture even when every individual frame is convincing.
 
 Optical flow estimates that inter-frame relationship directly, making the structure in the residuals explicit and visualisable.
 
