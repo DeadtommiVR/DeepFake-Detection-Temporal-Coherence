@@ -1,6 +1,31 @@
 # Methodology
 
-*Deepfake detection via optical-flow residuals and a CNN-LSTM temporal model. Companion document to the [README](README.md) — §1 sets out the problem framing and stakes, §2 reviews the related literature.*
+*Deepfake detection via optical-flow residuals and a CNN-LSTM temporal model. Companion document to the [README](README.md)
+
+### Table of Contents
+
+1. **Problem Framing**
+   1.1 Overview
+   1.2 Project Development and Lineage
+   1.3 Motion Fields vs. Artefacts
+   1.4 Limits of Detection
+   1.5 Stakes and Provenance
+
+2. **Related Work**
+   2.1 Frame-Based Detection
+   2.2 Motion-Based and Temporal Detection
+   2.3 Ensemble and Generative Approaches
+   2.4 Cross-Cutting Observations
+   2.5 Position of This Work
+
+3. **Measures and Metrics**
+   3.1 What We Are Looking For
+   3.2 The Object of Measurement: The Motion-Compensated Residual
+   3.3 The Measurements
+   3.4 What a Positive Result Looks Like
+   3.5 Relationship to the Implemented Model
+
+4. **References**
 
 ---
 
@@ -135,21 +160,8 @@ Both observations point the same direction, and both are taken up in this projec
 
 Within this map, the present project sits in the motion-based branch (§2.2), closest in substrate to *GC-ConsFlow* — both rest on optical-flow residuals as the locus where a generative model's failure to preserve physical motion coherence should be measurable. It is distinct in two respects. **Architecturally**, it pairs a CNN spatial backbone with an LSTM temporal model rather than an end-to-end transformer, a decoupled design chosen for tractability under limited compute. **Conceptually**, it foregrounds the two cross-cutting problems of §2.4 — compression and post-production — not as future work bolted on at the end, but as the reason the chosen signal is fragile in exactly the high-stakes settings where detection would matter most. The contribution is therefore less a claim to state-of-the-art accuracy than an *honest characterisation of one temporal signal*: what it detects, and the conditions under which it stops working.
 
+
 ---
-
-## References
-
-1. I. Amerini, L. Galteri, R. Caldelli, and A. Del Bimbo, "Deepfake Video Detection through Optical Flow based CNN," in *Proc. IEEE/CVF Int. Conf. Computer Vision (ICCV) Workshops*, Seoul, Korea, 2019.
-2. R. Caldelli, L. Galteri, I. Amerini, and A. Del Bimbo, "Optical Flow based CNN for detection of unlearnt deepfake manipulations," *Pattern Recognition Letters*, vol. 146, pp. 31–37, 2021, doi: 10.1016/j.patrec.2021.03.005.
-3. A. B. Nassif, Q. Nasir, M. A. Talib, and O. M. Gouda, "Improved Optical Flow Estimation Method for Deepfake Videos," *Sensors*, vol. 22, no. 7, p. 2500, 2022, doi: 10.3390/s22072500.
-4. D. Güera and E. J. Delp, "Deepfake Video Detection Using Recurrent Neural Networks," in *Proc. 15th IEEE Int. Conf. Advanced Video and Signal Based Surveillance (AVSS)*, Auckland, New Zealand, 2018, pp. 1–6, doi: 10.1109/AVSS.2018.8639163.
-5. "GC-ConsFlow: Leveraging Optical Flow Residuals and Global Context for Robust Deepfake Detection," arXiv:2501.13435, 2025.
-6. C. Zhao, C. Wang, G. Hu, H. Chen, C. Liu, and J. Tang, "ISTVT: Interpretable Spatial-Temporal Video Transformer for Deepfake Detection," *IEEE Trans. Information Forensics and Security*, vol. 18, pp. 1335–1348, 2023, doi: 10.1109/TIFS.2023.3239223.
-7. D. Wodajo, S. Atnafu, and Z. Akhtar, "Deepfake Video Detection Using Generative Convolutional Vision Transformer," arXiv:2307.07036, 2023.
-8. M. S. H. Shanto et al. (Team Straw Hats), "DFCON: Attention-Driven Supervised Contrastive Learning for Robust Deepfake Detection," IEEE SPS Signal Processing Cup 2025 (DFWild-Cup), arXiv:2501.16704, 2025.
-9. W. Liu, L. Li, C. Yan, Y. Zhang, X. Cheng, X. Zhao, and M. Liu, "Dynamic Facial Expression Recognition of Learners via Adaptive Global Attention and Differential Temporal Transformer," *CAAI Transactions on Intelligence Technology*, vol. 11, no. 2, pp. 514–528, 2026, doi: 10.1049/cit2.70115.
-10. L. Li, J. Bao, T. Zhang, H. Yang, D. Chen, F. Wen, and B. Guo, "Face X-Ray for More General Face Forgery Detection," in *Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)*, 2020.
-
 
 ## 3. Measures and Metrics
 
@@ -198,10 +210,28 @@ close to $1$ for white noise and dropping toward $0$ as periodic or low-frequenc
 
 Each video reduces to a short feature vector of the scalars above. The hypothesis is supported to the extent that authentic and generated videos **separate** in that space, measured by class separation or AUC on a held-out set. Three properties matter more than a headline accuracy number: separation that (i) **holds across generators not seen in training** (generator-agnostic), (ii) **survives compression** at realistic platform bitrates, and (iii) rests on the *interpretable* residual statistics above rather than an opaque learned score. A high benchmark figure that failed (i) or (ii) would not support the thesis; it would just be another in-distribution classifier.
 
+
+
 ![Residual structure: authentic residuals behave like noise, generated like deterministic structure, separating in feature space](assets/residual-structure.svg)
+
+
 
 ### 3.5 Relationship to the implemented model
 
 The metrics above describe the *principled* test the hypothesis implies. The model actually built in this project is a CNN-LSTM classifier over optical-flow-magnitude maps, a **learned proxy** that may key on these residual statistics but is not constrained to; it learns whatever separates its (small) training set. The honest position is that the implemented run demonstrates the data and feature pipeline end-to-end, while the principled experiment (computing the residual statistics of §3.3 directly and testing for class separation under conditions i, ii, and iii) is the project's defining next step, not something it claims already to have shown.
 
 **One confound to control.** The residual is not pure sensor noise even for authentic video: optical-flow estimation error is itself spatially structured and content-dependent, concentrating at occlusions and motion boundaries. A clean comparison therefore has to hold the flow estimator, scene content, and motion statistics fixed across the two classes, so that any *difference* in residual structure is attributable to the generator rather than to one class being harder to track.
+
+
+## References
+
+1. I. Amerini, L. Galteri, R. Caldelli, and A. Del Bimbo, "Deepfake Video Detection through Optical Flow based CNN," in *Proc. IEEE/CVF Int. Conf. Computer Vision (ICCV) Workshops*, Seoul, Korea, 2019.
+2. R. Caldelli, L. Galteri, I. Amerini, and A. Del Bimbo, "Optical Flow based CNN for detection of unlearnt deepfake manipulations," *Pattern Recognition Letters*, vol. 146, pp. 31–37, 2021, doi: 10.1016/j.patrec.2021.03.005.
+3. A. B. Nassif, Q. Nasir, M. A. Talib, and O. M. Gouda, "Improved Optical Flow Estimation Method for Deepfake Videos," *Sensors*, vol. 22, no. 7, p. 2500, 2022, doi: 10.3390/s22072500.
+4. D. Güera and E. J. Delp, "Deepfake Video Detection Using Recurrent Neural Networks," in *Proc. 15th IEEE Int. Conf. Advanced Video and Signal Based Surveillance (AVSS)*, Auckland, New Zealand, 2018, pp. 1–6, doi: 10.1109/AVSS.2018.8639163.
+5. "GC-ConsFlow: Leveraging Optical Flow Residuals and Global Context for Robust Deepfake Detection," arXiv:2501.13435, 2025.
+6. C. Zhao, C. Wang, G. Hu, H. Chen, C. Liu, and J. Tang, "ISTVT: Interpretable Spatial-Temporal Video Transformer for Deepfake Detection," *IEEE Trans. Information Forensics and Security*, vol. 18, pp. 1335–1348, 2023, doi: 10.1109/TIFS.2023.3239223.
+7. D. Wodajo, S. Atnafu, and Z. Akhtar, "Deepfake Video Detection Using Generative Convolutional Vision Transformer," arXiv:2307.07036, 2023.
+8. M. S. H. Shanto et al. (Team Straw Hats), "DFCON: Attention-Driven Supervised Contrastive Learning for Robust Deepfake Detection," IEEE SPS Signal Processing Cup 2025 (DFWild-Cup), arXiv:2501.16704, 2025.
+9. W. Liu, L. Li, C. Yan, Y. Zhang, X. Cheng, X. Zhao, and M. Liu, "Dynamic Facial Expression Recognition of Learners via Adaptive Global Attention and Differential Temporal Transformer," *CAAI Transactions on Intelligence Technology*, vol. 11, no. 2, pp. 514–528, 2026, doi: 10.1049/cit2.70115.
+10. L. Li, J. Bao, T. Zhang, H. Yang, D. Chen, F. Wen, and B. Guo, "Face X-Ray for More General Face Forgery Detection," in *Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)*, 2020.
