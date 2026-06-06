@@ -1,0 +1,59 @@
+<svg width="100%" viewBox="0 0 680 320" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>What the detector looks for: residual structure</title>
+<desc>Two lanes. Authentic capture: the motion-compensated residual is random speckle and its eigenvalue spectrum is flat (full rank, unpredictable). Generated video: the residual is structured and its eigenvalue spectrum decays steeply (low rank, predictable). At right, a feature space in which the two classes separate.</desc>
+<style>
+text{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+.th{font-size:14px;font-weight:500;fill:#2C2C2A;}
+.ts{font-size:12px;font-weight:400;fill:#5F5E5A;}
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<clipPath id="sw"><rect x="140" y="200" width="90" height="80" rx="4"/></clipPath>
+</defs>
+
+<rect x="1" y="1" width="678" height="318" rx="16" fill="#FBFAF7" stroke="#E7E5DF" stroke-width="1"/>
+
+<text class="th" x="140" y="60">Authentic capture</text>
+<rect x="140" y="72" width="90" height="80" rx="4" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.8"/>
+<g fill="#7A7A73" opacity="0.55">
+<circle cx="158" cy="92" r="2.2"/><circle cx="172" cy="101" r="2.2"/><circle cx="190" cy="89" r="2.2"/><circle cx="206" cy="104" r="2.2"/><circle cx="152" cy="116" r="2.2"/><circle cx="168" cy="125" r="2.2"/><circle cx="186" cy="118" r="2.2"/><circle cx="204" cy="129" r="2.2"/><circle cx="160" cy="139" r="2.2"/><circle cx="178" cy="132" r="2.2"/><circle cx="198" cy="141" r="2.2"/><circle cx="214" cy="110" r="2.2"/><circle cx="215" cy="138" r="2.2"/><circle cx="156" cy="103" r="2.2"/><circle cx="182" cy="143" r="2.2"/><circle cx="201" cy="115" r="2.2"/>
+</g>
+<line x1="232" y1="112" x2="266" y2="112" stroke="#888780" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="276" y1="80" x2="276" y2="150" stroke="#C7C5BD" stroke-width="1"/>
+<line x1="276" y1="150" x2="406" y2="150" stroke="#C7C5BD" stroke-width="1"/>
+<g fill="#CFE3F6" stroke="#2F7CCB" stroke-width="1">
+<rect x="284" y="96" width="14" height="54"/><rect x="304" y="100" width="14" height="50"/><rect x="324" y="97" width="14" height="53"/><rect x="344" y="101" width="14" height="49"/><rect x="364" y="98" width="14" height="52"/><rect x="384" y="100" width="14" height="50"/>
+</g>
+<text class="ts" x="341" y="166" text-anchor="middle">flat, full rank</text>
+
+<text class="th" x="140" y="192">Generated video</text>
+<rect x="140" y="200" width="90" height="80" rx="4" fill="#FAECE7" stroke="#F0997B" stroke-width="0.8"/>
+<g clip-path="url(#sw)" stroke="#D85A30" stroke-width="1.5">
+<line x1="110" y1="284" x2="194" y2="200"/><line x1="134" y1="284" x2="218" y2="200"/><line x1="158" y1="284" x2="242" y2="200"/><line x1="182" y1="284" x2="266" y2="200"/><line x1="206" y1="284" x2="290" y2="200"/><line x1="86" y1="284" x2="170" y2="200"/>
+</g>
+<line x1="232" y1="240" x2="266" y2="240" stroke="#888780" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="276" y1="208" x2="276" y2="278" stroke="#C7C5BD" stroke-width="1"/>
+<line x1="276" y1="278" x2="406" y2="278" stroke="#C7C5BD" stroke-width="1"/>
+<g fill="#F7D9CC" stroke="#C24E28" stroke-width="1">
+<rect x="284" y="212" width="14" height="66"/><rect x="304" y="234" width="14" height="44"/><rect x="324" y="250" width="14" height="28"/><rect x="344" y="261" width="14" height="17"/><rect x="364" y="268" width="14" height="10"/><rect x="384" y="272" width="14" height="6"/>
+</g>
+<text class="ts" x="341" y="294" text-anchor="middle">decaying, low rank</text>
+
+<rect x="440" y="72" width="200" height="200" rx="12" fill="none" stroke="#C7C5BD" stroke-width="1" stroke-dasharray="4 4"/>
+<text class="th" x="540" y="94" text-anchor="middle">feature space</text>
+<line x1="470" y1="110" x2="470" y2="250" stroke="#C7C5BD" stroke-width="1"/>
+<line x1="470" y1="250" x2="622" y2="250" stroke="#C7C5BD" stroke-width="1"/>
+<text class="ts" x="470" y="106" text-anchor="middle">rank</text>
+<text class="ts" x="612" y="266" text-anchor="middle">R²</text>
+<line x1="474" y1="140" x2="620" y2="236" stroke="#A8A69E" stroke-width="1" stroke-dasharray="4 4"/>
+<g fill="#B5D4F4" stroke="#2F7CCB" stroke-width="1">
+<circle cx="498" cy="134" r="4"/><circle cx="512" cy="126" r="4"/><circle cx="506" cy="146" r="4"/><circle cx="526" cy="136" r="4"/><circle cx="492" cy="152" r="4"/><circle cx="520" cy="150" r="4"/>
+</g>
+<g fill="#F5C4B3" stroke="#C24E28" stroke-width="1">
+<circle cx="586" cy="232" r="4"/><circle cx="600" cy="224" r="4"/><circle cx="576" cy="222" r="4"/><circle cx="608" cy="240" r="4"/><circle cx="592" cy="212" r="4"/><circle cx="574" cy="242" r="4"/>
+</g>
+<circle cx="452" cy="290" r="4" fill="#B5D4F4" stroke="#2F7CCB" stroke-width="1"/>
+<text class="ts" x="462" y="294">authentic</text>
+<circle cx="548" cy="290" r="4" fill="#F5C4B3" stroke="#C24E28" stroke-width="1"/>
+<text class="ts" x="558" y="294">generated</text>
+</svg>

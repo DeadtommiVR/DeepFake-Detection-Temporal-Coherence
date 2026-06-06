@@ -149,3 +149,59 @@ Within this map, the present project sits in the motion-based branch (§2.2), cl
 8. M. S. H. Shanto et al. (Team Straw Hats), "DFCON: Attention-Driven Supervised Contrastive Learning for Robust Deepfake Detection," IEEE SPS Signal Processing Cup 2025 (DFWild-Cup), arXiv:2501.16704, 2025.
 9. W. Liu, L. Li, C. Yan, Y. Zhang, X. Cheng, X. Zhao, and M. Liu, "Dynamic Facial Expression Recognition of Learners via Adaptive Global Attention and Differential Temporal Transformer," *CAAI Transactions on Intelligence Technology*, vol. 11, no. 2, pp. 514–528, 2026, doi: 10.1049/cit2.70115.
 10. L. Li, J. Bao, T. Zhang, H. Yang, D. Chen, F. Wen, and B. Guo, "Face X-Ray for More General Face Forgery Detection," in *Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)*, 2020.
+
+
+## 3. Measures and Metrics
+
+### 3.1 What we are looking for
+
+The hypothesis of §1 makes a single testable prediction. After motion compensation removes the component two frames share, the leftover *residual* should behave differently in the two classes. In authentic capture it should approximate **independent sensor noise**: unpredictable from one frame to the next, full-rank, spectrally flat. In generated video it should carry the **signature of a deterministic procedure**: predictable, low-rank, spectrally structured. The outcome this project looks for is therefore not a particular artefact but a *measurable gap in residual structure*, ideally one that holds across generators (generator-agnostic) and survives compression.
+
+### 3.2 The object of measurement: the motion-compensated residual
+
+Given consecutive frames $I_t$ and $I_{t+1}$ and an estimated dense optical-flow field $f_{t\to t+1}$, warp the earlier frame forward along the flow and subtract:
+
+$$\tilde I_{t+1}(x) = I_t\big(x + f_{t\to t+1}(x)\big), \qquad r_t = I_{t+1} - \tilde I_{t+1}.$$
+
+The residual $r_t$ is the part of the inter-frame change *not* explained by estimated motion. For real capture it is dominated by independent sensor noise; for generated video it should additionally contain the cross-frame structure introduced by the generator. The implemented pipeline uses Farneback flow-magnitude maps as a cheaper proxy for $r_t$; the residual is the conceptually correct object (see §3.5).
+
+### 3.3 The measurements
+
+The thesis is one claim, *residual independence*, viewed through several complementary lenses.
+
+| Metric | What it tests | Authentic | Generated |
+|---|---|---|---|
+| Inter-frame predictability, $R^2$ | variance of the next residual explained by a linear map from the current | $\approx 0$ | $> 0$ |
+| Lag-1 mutual information, $I(r_t; r_{t+1})$ | statistical dependence between consecutive residuals | $\approx 0$ | $> 0$ |
+| Effective rank (participation ratio) | how concentrated the residual covariance spectrum is | high (near-full) | low |
+| Spectral flatness (SFM) | how white the residual power spectrum is | $\approx 1$ | $\ll 1$ |
+
+**Predictability (the core test).** Fit the simplest possible inter-frame operator $A$ by least squares, $r_{t+1} \approx A\,r_t$, and report the explained variance
+
+$$R^2 = 1 - \frac{\sum_t \lVert r_{t+1} - A\,r_t\rVert^2}{\sum_t \lVert r_{t+1} - \bar r\rVert^2}.$$
+
+Independent noise cannot be predicted from its own past, so $R^2 \to 0$; a deterministic generation function leaves $R^2 > 0$. The operator $A$ is, quite literally, an estimate of the *generation function between frames* the hypothesis posits, and the magnitude of $R^2$ measures how strongly that function is present.
+
+**Rank and eigenstructure (the PCA lens, §1.2).** Form the residual covariance $C = \tfrac{1}{N}\sum_t r_t r_t^{\top}$ with eigenvalues $\lambda_1 \ge \lambda_2 \ge \dots$. White noise gives a flat spectrum ($C \approx \sigma^2 I$, every direction equally energetic); structure concentrates energy into a few components. A single summary is the participation ratio
+
+$$\mathrm{PR} = \frac{\big(\sum_i \lambda_i\big)^2}{\sum_i \lambda_i^2},$$
+
+large (close to the full dimension) for noise-like residuals and small for structured ones. This is the quantity shown as the eigenvalue spectrum: flat for authentic capture, steeply decaying for generated video.
+
+**Spectral flatness (the frequency lens).** Take the residual power spectrum $P$ (2-D FFT). The spectral flatness measure is the ratio of its geometric to arithmetic mean,
+
+$$\mathrm{SFM} = \frac{\exp\!\big(\tfrac{1}{n}\sum_i \log P_i\big)}{\tfrac{1}{n}\sum_i P_i} \in (0, 1],$$
+
+close to $1$ for white noise and dropping toward $0$ as periodic or low-frequency structure appears, including the regular spectral peaks that upsampling and convolution layers are known to leave in generated imagery.
+
+### 3.4 What a positive result looks like
+
+Each video reduces to a short feature vector of the scalars above. The hypothesis is supported to the extent that authentic and generated videos **separate** in that space, measured by class separation or AUC on a held-out set. Three properties matter more than a headline accuracy number: separation that (i) **holds across generators not seen in training** (generator-agnostic), (ii) **survives compression** at realistic platform bitrates, and (iii) rests on the *interpretable* residual statistics above rather than an opaque learned score. A high benchmark figure that failed (i) or (ii) would not support the thesis; it would just be another in-distribution classifier.
+
+![Residual structure: authentic residuals behave like noise, generated like deterministic structure, separating in feature space](assets/residual-structure.svg)
+
+### 3.5 Relationship to the implemented model
+
+The metrics above describe the *principled* test the hypothesis implies. The model actually built in this project is a CNN-LSTM classifier over optical-flow-magnitude maps, a **learned proxy** that may key on these residual statistics but is not constrained to; it learns whatever separates its (small) training set. The honest position is that the implemented run demonstrates the data and feature pipeline end-to-end, while the principled experiment (computing the residual statistics of §3.3 directly and testing for class separation under conditions i, ii, and iii) is the project's defining next step, not something it claims already to have shown.
+
+**One confound to control.** The residual is not pure sensor noise even for authentic video: optical-flow estimation error is itself spatially structured and content-dependent, concentrating at occlusions and motion boundaries. A clean comparison therefore has to hold the flow estimator, scene content, and motion statistics fixed across the two classes, so that any *difference* in residual structure is attributable to the generator rather than to one class being harder to track.
