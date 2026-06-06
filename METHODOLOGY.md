@@ -2,31 +2,27 @@
 
 *Deepfake detection via optical-flow residuals and a CNN-LSTM temporal model. Companion document to the [README](README.md)
 
-### Table of Contents
+## Contents
 
-1. **Problem Framing**
-   1.1 Overview
-   1.2 Project Development and Lineage
-   1.3 Motion Fields vs. Artefacts
-   1.4 Limits of Detection
-   1.5 Stakes and Provenance
-
-2. **Related Work**
-   2.1 Frame-Based Detection
-   2.2 Motion-Based and Temporal Detection
-   2.3 Ensemble and Generative Approaches
-   2.4 Cross-Cutting Observations
-   2.5 Position of This Work
-
-3. **Measures and Metrics**
-   3.1 What We Are Looking For
-   3.2 The Object of Measurement: The Motion-Compensated Residual
-   3.3 The Measurements
-   3.4 What a Positive Result Looks Like
-   3.5 Relationship to the Implemented Model
-
-4. **References**
-
+- [1. Problem Framing](#1-problem-framing)
+  - [1.1 Overview](#11-overview)
+  - [1.2 Project Development and Lineage](#12-project-development-and-lineage)
+  - [1.3 Motion Fields vs. Artefacts](#13-motion-fields-vs-artefacts)
+  - [1.4 Limits of Detection](#14-limits-of-detection)
+  - [1.5 Stakes and Provenance](#15-stakes-and-provenance)
+- [2. Related Work](#2-related-work)
+  - [2.1 Frame-Based Detection](#21-frame-based-detection)
+  - [2.2 Motion-Based and Temporal Detection](#22-motion-based-and-temporal-detection)
+  - [2.3 Ensemble and Generative Approaches](#23-ensemble-and-generative-approaches)
+  - [2.4 Cross-Cutting Observations](#24-cross-cutting-observations)
+  - [2.5 Position of This Work](#25-position-of-this-work)
+- [3. Measures and Metrics](#3-measures-and-metrics)
+  - [3.1 What we are looking for](#31-what-we-are-looking-for)
+  - [3.2 The object of measurement](#32-the-object-of-measurement-the-motion-compensated-residual)
+  - [3.3 The measurements](#33-the-measurements)
+  - [3.4 What a positive result looks like](#34-what-a-positive-result-looks-like)
+  - [3.5 Relationship to the implemented model](#35-relationship-to-the-implemented-model)
+- [References](#references)
 ---
 
 ## 1. Problem Framing
