@@ -1,148 +1,109 @@
-# Explanation of the dataset
-# Deepfake Detection Dataset - Datasheet
+# Data Card: Deepfake Detection Dataset
 
-## Motivation
+## Dataset Overview
 
-### For what purpose was the dataset created?
-This dataset was created to develop and evaluate **deepfake video detection models**, specifically by analyzing **motion inconsistencies** using **optical flow features**. Deepfake videos often contain unnatural motion due to frame interpolation artifacts, which this dataset helps identify.
+This dataset is a processed subset of the **Deep Fake Detection (DFD)** dataset, prepared for a deepfake detection project focused on **temporal motion structure** rather than static frame-level artefacts.
 
-### Who created the dataset?
-The dataset was assembled from the **Deep Fake Detection (DFD) dataset** and processed for this project. The preprocessing, extraction, and organization of data were done as part of an independent research effort.
+The dataset supports experiments using optical-flow-derived motion features and a CNN-LSTM temporal model. Each sample is treated as a video sequence rather than an isolated image, allowing the model to learn from frame-to-frame behaviour.
 
-### Any other comments?
-- The dataset is **not an original dataset** but a **processed version** of an existing dataset.  
-- The preprocessing steps focus on **temporal inconsistencies** rather than spatial frame-level artifacts.
+The dataset is not original. It is a project-specific processed version of an existing public deepfake detection dataset.
 
 ---
 
-## Composition
+## Purpose and Scope
 
-### What do the instances in the dataset represent?
-Each instance represents a **video sequence** of **305 consecutive frames** extracted from **real and fake videos**. The dataset is divided into:
-- **Real video sequences** (genuine human recordings)
-- **Fake video sequences** (deepfake-generated content)
+The dataset was prepared to develop and evaluate deepfake video detection methods based on **motion inconsistency**, **temporal coherence**, and **optical flow features**.
 
-### How many instances are there?
-- The dataset contains **a balanced set of real and fake sequences**.
-- Each sequence consists of **305 frames**.
+The central assumption is that generated or manipulated videos may contain motion patterns that differ from physically captured video. These differences may appear in the residual structure between frames, especially after optical flow is used to estimate inter-frame motion.
 
-### Does the dataset contain all possible instances or is it a sample?
-This dataset is a **subset of a larger dataset** (DFD) and was sampled based on availability and feasibility of processing. The sampling **prioritizes videos with noticeable motion artifacts**.
+The dataset was therefore organised to support a temporal detection pipeline rather than a purely spatial classifier.
 
-### What does each instance consist of?
+---
+
+## Source Dataset
+
+The data was sourced from the **Deep Fake Detection (DFD)** dataset and then processed for this project.
+
+Processing included:
+
+* extracting frame sequences from real and fake videos
+* standardising sequence length
+* preparing the data for optical flow computation
+* organising the processed data into train, test, and holdout sets
+
+The preprocessing, extraction, and organisation were carried out as part of this independent research project.
+
+---
+
+## Dataset Composition
+
+Each instance represents a video sequence made up of **305 consecutive frames**.
+
+The dataset contains two classes:
+
+* **Real sequences**: genuine recorded human video
+* **Fake sequences**: deepfake-generated or manipulated video
+
+The dataset was constructed as a balanced set of real and fake sequences where possible. Each sequence is intended to provide enough temporal information for motion-based analysis.
+
+The dataset is a subset of a larger source dataset and was selected according to processing feasibility, availability, and relevance to motion-based detection.
+
+---
+
+## Labels
+
+The dataset uses binary labels:
+
+* `0` = real video
+* `1` = fake video
+
+These labels are used for supervised classification.
+
+---
+
+## Data Structure
+
 Each instance consists of:
-- **305 extracted frames** from a video.
-- **Optical Flow feature maps** computed dynamically during training.
 
-### Are there labels for the data?
-Yes:
-- `0` for real videos.
-- `1` for fake videos.
+* a sequence of 305 extracted frames
+* a corresponding class label
+* optical-flow feature maps computed dynamically during training
 
-### Is there missing information in the dataset?
-No missing data after preprocessing.
-
-### Are there recommended train/test splits?
-Yes:
-- **Train:** 80% of the dataset.
-- **Test:** 20% of the dataset.
-- **Holdout Set:** 1 real and 1 fake sequence for final validation.
-
-### Does the dataset contain confidential or sensitive information?
-No. The dataset consists of **publicly available deepfake detection data**.
-
-### Any other comments?
-- The dataset is **structured for deep learning models**, specifically **CNN-LSTM architectures**.
-- Optical Flow is computed **on-the-fly** rather than being precomputed.
+Optical flow was not stored permanently as precomputed arrays. Instead, it was calculated during the model pipeline to reduce the already substantial storage burden.
 
 ---
 
-## Collection Process
+## Train, Test, and Holdout Splits
 
-### How was the data acquired?
-The dataset was sourced from the **Deep Fake Detection (DFD) dataset** and processed by:
-1. **Extracting frames** from each video.
-2. **Standardizing frame sequence lengths** to 305 frames.
-3. **Computing Optical Flow dynamically** for motion analysis.
+The dataset was split into:
 
-### Over what time frame was the data collected?
-The original dataset was collected as part of deepfake research between **2019-2022**.
+* **Training set**: 80%
+* **Test set**: 20%
+* **Holdout set**: 1 real sequence and 1 fake sequence for final validation
 
-### Were ethical review processes conducted?
-No specific review process was required since this dataset is publicly available.
-
-### Any other comments?
-- The dataset was curated to focus on **temporal deepfake artifacts**, rather than static frame-level inconsistencies.
+The holdout set was used as a small final check after training and testing.
 
 ---
 
-## Preprocessing
+## Preprocessing Pipeline
 
-### What preprocessing was done?
-- **Frame Extraction:** Videos were split into sequences of 305 frames.
-- **Standardization:** All sequences were trimmed or padded to 305 frames.
-- **Optical Flow Computation:** Implemented dynamically during training.
-- **Dataset Splitting:** Train, test, and holdout sets were created.
+The preprocessing pipeline included:
 
-### Was raw data saved?
-No, only the processed sequences and structured dataset were retained.
+1. **Frame extraction**
+   Videos were split into individual image frames.
 
-### Any other comments?
-- Optical Flow is **computed on-the-fly**, reducing storage requirements.
+2. **Sequence standardisation**
+   Each video sequence was trimmed or padded to 305 frames.
 
----
+3. **Normalisation**
+   Frames were normalised for model compatibility and to reduce variation caused by inconsistent raw video formatting.
 
-## Uses
+4. **Optical flow preparation**
+   Optical flow was computed dynamically during training to capture frame-to-frame motion patterns.
 
-### What other tasks could this dataset be used for?
-- Deepfake detection using different architectures (e.g., Transformers, 3D CNNs).
-- Motion pattern analysis in video forensics.
-- Research into **optical flow-based anomaly detection**.
+5. **Dataset splitting**
+   Processed sequences were divided into training, testing, and holdout sets.
 
-### Are there any risks in using this dataset?
-Yes:
-- The dataset is **not fully representative** of all deepfake types.
-- **Static frame inconsistencies** are **not** the primary focus.
-- Performance may degrade on **deepfakes that use advanced motion correction**.
+This preprocessing stage was one of the most practically difficult parts of the project. Extracting frames from video, standardising sequence lengths, normalising frame data,
 
-### Any other comments?
-- Future datasets should include **3D optical flow mapping** to capture richer temporal distortions.
-
----
-
-## Distribution
-
-### Will the dataset be shared publicly?
-No, since it is a processed version of an existing dataset.
-
-### How will the dataset be distributed?
-Not publicly distributed. It is used **internally for research and model development**.
-
-### Will the dataset be distributed under a license?
-Not applicable, since it is derived from an external dataset.
-
-### Any other comments?
-- The dataset is not open-source but can be **reproduced using the preprocessing scripts**.
-
----
-
-## Maintenance
-
-### Who will maintain the dataset?
-The dataset will be maintained by the project team for research purposes.
-
-### Any other comments?
-- Updates to the dataset may include **3D spatiotemporal deepfake features** in future versions.
-- If extended, **new data sources will be integrated** for a broader evaluation.
-
----
-
-## Summary
-- This dataset is a **preprocessed deepfake detection dataset** designed for **motion analysis** using **Optical Flow and CNN-LSTM models**.
-- It is **not publicly distributed** but can be **recreated from the preprocessing scripts**.
-- Future iterations may include **multi-scale temporal analysis** and **advanced deepfake correction techniques**.
-
----
-
-This datasheet provides full transparency on **what the dataset is, how it was created, and how it should be used**. It ensures responsible usage and documentation for researchers and developers working on deepfake detection.  
 

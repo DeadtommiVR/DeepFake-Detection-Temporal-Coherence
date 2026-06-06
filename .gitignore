@@ -1,1 +1,2 @@
 # Files to exclude from Git tracking
+.DS_Store
